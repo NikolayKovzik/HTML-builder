@@ -20,7 +20,7 @@ async function copyDir(mainPath, copiedPath) {
   await fs.mkdir(copiedPath, { recursive: true });
   const files = await fs.readdir(mainPath, { withFileTypes: true });
   files.forEach((file)=>{
-    fs.copyFile(mainPath + '/' + file.name, copiedPath + '/' + file.name);
+    fs.copyFile(path.join(mainPath,file.name), path.join(copiedPath,file.name));
   });
 }
 
