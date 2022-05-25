@@ -10,6 +10,8 @@ const copiedFolderPath = path.join(__dirname, 'files-copy');
 })().catch((error)=>{
   if(error.code === 'ENOENT') {
     copyDir(mainFolderPath, copiedFolderPath);
+  } else {
+    console.log(`Error: ${error}`);
   }
 });
 
@@ -22,8 +24,7 @@ async function copyDir(mainPath, copiedPath) {
   });
 }
 
-//!Работа не доделана, буду очень признателен, если вы проверите её в четверг, спасибо!
-//!Если проверяете, оставляйте пожалуйста контакт для обратной связи) telegram: @ithinkiwinaloto; 
+//!оставляйте пожалуйста контакт для обратной связи) telegram: @ithinkiwinaloto; 
 //! discord theroofisonfire#1523 (NikolayKovzik)
 
 

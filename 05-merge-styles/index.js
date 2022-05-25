@@ -19,3 +19,6 @@ const destinationFile = path.join(__dirname, 'project-dist', 'bundle.css');
     }   
   });
 })(sourceDirectory);
+
+//!оставляйте пожалуйста контакт для обратной связи) telegram: @ithinkiwinaloto; 
+//! discord theroofisonfire#1523 (NikolayKovzik)

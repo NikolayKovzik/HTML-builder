@@ -15,6 +15,5 @@ fs.readdir(folderPath, {withFileTypes: true}, (err, files) => {
   }
 });
 
-//!Работа не доделана, буду очень признателен, если вы проверите её в четверг, спасибо!
-//!Если проверяете, оставляйте пожалуйста контакт для обратной связи) telegram: @ithinkiwinaloto; 
+//!оставляйте пожалуйста контакт для обратной связи) telegram: @ithinkiwinaloto; 
 //! discord theroofisonfire#1523 (NikolayKovzik)
