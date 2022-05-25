@@ -23,12 +23,6 @@ async function createStylesBundle(stylesFolder) {
   });
 }
 
-async function checkAssetsFolderExistence() {
-  await fsPromises.access(copiedAssetsPath);
-  await fsPromises.rm(copiedAssetsPath, { recursive: true, force: true });
-  copyAssetsDir(assetsFolderPath, copiedAssetsPath);
-}
-
 async function copyAssetsDir(mainPath, copiedPath) {
   await fsPromises.mkdir(copiedPath, { recursive: true });
   const folderItems = await fsPromises.readdir(mainPath, { withFileTypes: true });
@@ -47,12 +41,5 @@ async function copyAssetsDir(mainPath, copiedPath) {
   await fsPromises.mkdir(projectPath);
   // buildHtml();
   createStylesBundle(stylesPath);
-  checkAssetsFolderExistence().catch((error) => {
-    if (error.code === 'ENOENT') {
-      copyAssetsDir(assetsFolderPath, copiedAssetsPath);
-    } else {
-      console.log(`Error: ${error}`);
-    }
-  });
-  // copyDir(path.join(__dirname, 'assets'), path.join(pathToProject, 'assets'));
+  copyAssetsDir(assetsFolderPath, copiedAssetsPath);
 })();
