@@ -1,11 +1,37 @@
 const path = require('path');
 const fs = require('fs');
 const fsPromises = require('fs/promises');
-const projectPath = path.join(__dirname, 'project-dist');
 const stylesPath = path.join(__dirname, 'styles');
 const assetsFolderPath = path.join(__dirname, 'assets');
+const templateHTMLpath = path.join(__dirname, 'template.html');
+const componentsPath = path.join(__dirname, 'components');
+const projectPath = path.join(__dirname, 'project-dist');
 const copiedAssetsPath = path.join(projectPath, 'assets');
-const destinationStylesFile = path.join(__dirname, 'project-dist', 'style.css');
+const destinationStylesFile = path.join(projectPath, 'style.css');
+const newHTMLFilePath = path.join(projectPath, 'index.html');
+
+
+async function buildHTMLfile() {
+  let htmlFileData = await fsPromises.readFile(templateHTMLpath, { encoding: 'utf-8' });
+  let componentsFiles = (await fsPromises.readdir(componentsPath, { withFileTypes: true }))
+    .filter((item) => !item.isDirectory() && path.extname(item.name) === '.html');
+  let matchesArray = Array.from(htmlFileData.matchAll(/{{(\w+)}}/g));
+  const templatesArray = matchesArray.map((item)=>item[0]);
+  const templateNamesArray = matchesArray.map((item)=>item[1]);
+  // console.log('templatesArray:  ',templatesArray);
+  // console.log('templatesArray:  ',templateNamesArray);
+  // console.log('componentsFiles:  ', componentsFiles);
+  componentsFiles.forEach(async (componentFile) => {
+    const filePath = path.join(componentsPath, componentFile.name);
+    const fileName = componentFile.name.replace(/\.\w+/,'');
+    if(templateNamesArray.includes(fileName)) {
+      let index = templateNamesArray.indexOf(fileName);
+      let componentData  = await fsPromises.readFile(filePath, { encoding: 'utf-8' });
+      htmlFileData = htmlFileData.replaceAll(templatesArray[index], componentData);
+      await fsPromises.writeFile(newHTMLFilePath, htmlFileData);
+    }
+  });
+}
 
 
 async function createStylesBundle(stylesFolder) {
@@ -39,7 +65,7 @@ async function copyAssetsDir(mainPath, copiedPath) {
 (async function buildPage() {
   await fsPromises.rm(projectPath, { force: true, recursive: true });
   await fsPromises.mkdir(projectPath);
-  // buildHtml();
+  buildHTMLfile();
   createStylesBundle(stylesPath);
   copyAssetsDir(assetsFolderPath, copiedAssetsPath);
 })();
